@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="./../vue.min.js"></script>
+  <title>Componentes</title>
+</head>
+<body>
+ 
+  <div id="app">
+    {{contador}}
+    <custom-button 
+      :contador="contador"
+      @update:contador="contador = $event"
+      >
+    </custom-button>
+  </div>
+
+  <script>
+
+    const CustomButton = {
+      name: 'CustomButton',
+      props: {
+        contador: Number
+      },
+      data(){
+        return {
+          contadorComponente: this.contador
+        }
+      },
+      template: `<button @click="incrementar">Clique {{contadorComponente}}</button>`,
+      methods: {
+        incrementar() {
+          this.contadorComponente++
+          this.$emit('update:contador', this.contadorComponente)
+        }
+      }
+    }
+
+    const vm = new Vue({
+      el: '#app',
+      components: { CustomButton },
+      data: {
+        contador: 0
+      },
+      methods: {
+      }
+    })
+  </script>
+
+</body>
+</html>

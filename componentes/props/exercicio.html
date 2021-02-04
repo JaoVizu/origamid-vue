@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="./../vue.min.js"></script>
+  <style>
+    .loading{
+      font-family: 'Courier New', Courier, monospace;
+      animation: upDown 1s infinite;
+    }
+
+    @keyframes upDown {
+      50% { transform: translate3d(0, 30px, 0); }
+
+      100% {transform: translate3d(0, 0px, 0);}
+    }
+  </style>
+  <title>Componentes</title>
+</head>
+<body>
+ 
+  <div id="app">
+    <formulario></formulario>
+  </div>
+
+  <script>
+
+    const Quotes = {
+        name: 'Quotes',
+        props : {
+          quoteValue: Object
+        },
+        template: `
+          <ul>
+            <li v-for="(quote, index) in quoteValue">{{index}}: {{quote}}</li>  
+          </li>
+        `
+    }
+    
+    const Formulario = {
+      name: 'Formulario',
+      data(){
+        return {
+          simbol: '',
+          loading: '',
+          quote: {}
+        }
+      },
+      components: { Quotes },
+      methods: {
+        fetchQuotes(){
+          this.loading = true
+          setTimeout(() => {
+            fetch(`https://api.origamid.dev/stock/${this.simbol}/quote`)
+              .then(r => r.json())
+              .then(r => this.quote = r)
+              this.loading = false
+          }, 5000)  
+        }
+      },
+      template: `
+        <div>
+          <form @submit.prevent="fetchQuotes">
+            <p>Simbolo empresa</p>
+            <input type="text" v-model="simbol"/> 
+            <button>Buscar</button>
+          </form>
+          <div v-if="loading">
+            <p class="loading">Loading</p>
+          </div>
+          <div v-else>
+              <quotes :quoteValue="quote"></quotes>  
+          </div>
+          
+        </div>
+      `
+    }
+
+   
+
+    const vm = new Vue({
+      el: '#app',
+      components: { Formulario }
+    })
+  </script>
+
+</body>
+</html>

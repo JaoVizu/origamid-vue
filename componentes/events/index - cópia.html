@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="./../vue.min.js"></script>
+  <title>Componentes</title>
+</head>
+<body>
+ 
+  <div id="app">
+    <componente-um></componente-um>
+    <input
+      v-model="formulario.checado"
+     type="checkbox"/> Teste
+
+    <button @click="formulario.checado = true">Alterar o Check</button>
+    <button @click="formulario.checado = false">Alterar o false</button>
+  </div>
+
+  <script>
+
+    
+
+    const ComponenteUm = {
+      name: 'ComponenteUm', 
+      template: `<p @click="emitirEvento">Componente Um </p>`,
+      data(){
+        return {
+          mensagem: 'Esse é o componente um'
+        }
+      },
+      methods : {
+        emitirEvento() {
+          EventBus.$emit('meuevento', this.mensagem)
+        }
+      }
+    }
+
+    const vm = new Vue({
+      el: '#app',
+      data: {
+        formulario: {
+          checado: null
+        }
+      }
+    })
+  </script>
+
+</body>
+</html>
